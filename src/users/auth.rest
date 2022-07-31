@@ -1,0 +1,5 @@
+Post http://localhost:3000/auth/login
+{
+	"email": "max@gmail.com", 
+	"password": "max"
+}
