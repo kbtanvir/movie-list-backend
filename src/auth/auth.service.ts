@@ -90,11 +90,16 @@ export class AuthService {
     // ? GENERATE ACCESS TOKEN
     // -------------------------
     try {
-      access_token = await this.jwtService.signAsync({
-        id: user.id,
-        email: user.email,
-        type: 'access_token',
-      });
+      access_token = await this.jwtService.signAsync(
+        {
+          id: user.id,
+          email: user.email,
+          type: 'access_token',
+        },
+        {
+          expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN,
+        },
+      );
     } catch (e) {
       throw new HttpException(
         'Could not generate access token',
@@ -106,16 +111,18 @@ export class AuthService {
     // -------------------------
 
     try {
-      refresh_token = await this.jwtService.signAsync({
-        id: user.id,
-        email: user.email,
-        type: 'access_token',
-      });
-    } catch (e) {
-      throw new HttpException(
-        'Could not generate refresh token',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+      refresh_token = await this.jwtService.signAsync(
+        {
+          id: user.id,
+          email: user.email,
+          type: 'refresh_token',
+        },
+        {
+          expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
+        },
       );
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // TODO: remove user list response //
@@ -170,16 +177,23 @@ export class AuthService {
   }
 
   public async refreshJwtToken(dto: RefreshTokenDto) {
-    // const refreshTokenData = await this.jwtService.verifyJWT(dto.refreshToken);
+    // ! IS REFRESH TOKEN VALID
+    // -------------------------
 
-    // if (refreshTokenData.type !== 'refresh_token')
-    //   throw new BadRequestException('Invalid refresh token');
+    const isValid = this.jwtService.decode(dto.refreshToken, {
+      json: true,
+    });
 
-    // const user = await this.userService.findByID(refreshTokenData.id);
+    if (!isValid) {
+      throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
+    }
 
-    // if (!user) throw new NotFoundException('User not found');
+    // * RETURN REFRESH TOKEN
+    // -------------------------
 
-    return 'ahaha';
+    // * RETURN LOGIN RESPONSE
+
+    return { isValid };
   }
 
   private async getHashedPassword(password: string) {

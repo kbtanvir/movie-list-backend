@@ -1,0 +1,44 @@
+
+POST http://localhost:3000/auth/register
+content-type: application/json
+
+{
+  	"firstName": "John",
+ 	"lastName": "Smith",
+ 	"email": "john@gmail.com",
+ 	"password": "admin"
+}
+
+###
+
+POST http://localhost:3000/auth/login
+content-type: application/json
+
+{
+   "email": "john@gmail.com",
+   "password": "admin"
+}
+
+###
+
+POST http://localhost:3000/auth/refresh-token
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkyOTY0IiwiZW1haWwiOiJqb2huQGdtYWlsLmNvbSIsInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5Mjk2NDQyLCJleHAiOjE2NjE4ODg0NDJ9.vGwNyZqTCQo4te9SbFAPparJGKGACfeoPWnkb16-BVk
+
+{
+	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkyOTY0IiwiZW1haWwiOiJqb2huQGdtYWlsLmNvbSIsInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5Mjk2NDQyLCJleHAiOjE2NjE4ODg0NDJ9.vGwNyZqTCQo4te9SbFAPparJGKGACfeoPWnkb16-BVk"
+}
+
+###
+
+POST http://localhost:3000/auth/change-password
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkyOTMxIiwiZW1haWwiOiJqb2huQGdtYWlsLmNvbSIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NTkyOTMxMjEsImV4cCI6MTY1OTI5NjcyMX0.rolG0u_4WiotST2Z8dXDOwp3WafPCegWAWtpdgBGD8s
+
+{
+	"uid": "16592931",
+   	"oldPassword": "admin",
+   	"newPassword": "newpassword",
+   	"confirmNewPassword": "newpassword"
+}
+

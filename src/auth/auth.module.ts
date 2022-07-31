@@ -12,7 +12,6 @@ import { JwtStrategy } from './guards/jwt.strategy';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1h' },
       }),
     }),
     UsersModule,
