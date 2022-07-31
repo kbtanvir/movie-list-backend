@@ -1,12 +1,11 @@
 
-
 POST http://localhost:3000/auth/register
 content-type: application/json
 
 {
   	"firstName": "John",
  	"lastName": "Smith",
- 	"email": "joasn@gmail.com",
+ 	"email": "john@gmail.com",
  	"password": "admin"
 }
 
@@ -16,8 +15,18 @@ POST http://localhost:3000/auth/login
 content-type: application/json
 
 {
-   "email": "johdsfn@gmail.com",
+   "email": "john@gmail.com",
    "password": "admin"
 }
 
 ###
+
+POST http://localhost:3000/auth/change-password
+content-type: application/json
+
+{
+	"uid": "16592835",
+   	"oldPassword": "admin",
+   	"newPassword": "newpassword",
+   	"confirmNewPassword": "newpassword"
+}

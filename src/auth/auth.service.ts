@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity, UsersService } from '../users/users.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { LoginDto } from './dto/login.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
@@ -18,7 +19,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(dto: LoginDto) {
+  public async login(dto: LoginDto) {
     // ! DOES USER EXIST
     // -------------------------
     const record = await this.usersService.findByEmail(dto.email);
@@ -42,7 +43,7 @@ export class AuthService {
     return this.loginResponse(record);
   }
 
-  async register(dto: RegisterDto) {
+  public async register(dto: RegisterDto) {
     const { email, password, ...rest } = dto;
 
     // ! DOES USER ALREADY EXIST
@@ -63,10 +64,10 @@ export class AuthService {
     // -------------------------
 
     const newUser = await this.usersService.create({
+      ...rest,
       id: Date.now().toString().slice(0, 8),
       email,
       password: hashedPassword,
-      ...rest,
     });
 
     if (!newUser)
@@ -83,15 +84,39 @@ export class AuthService {
 
   private async loginResponse(
     user: UserEntity,
-  ): Promise<{ access_token: string; refresh_token: string; list: any }> {
-    // ? GENERATE ACCESS TOKEN ? //
+  ): Promise<{ access_token?: string; refresh_token?: string; list?: any }> {
+    let access_token: string;
+    let refresh_token: string;
+    // ? GENERATE ACCESS TOKEN
+    // -------------------------
+    try {
+      access_token = await this.jwtService.signAsync({
+        id: user.id,
+        email: user.email,
+        type: 'access_token',
+      });
+    } catch (e) {
+      throw new HttpException(
+        'Could not generate access token',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    // ? GENERATE REFRESH TOKEN
     // -------------------------
 
-    const access_token = await this.jwtService.signAsync(user);
-
-    // ? GENERATE REFRESH TOKEN ? //
-    // -------------------------
-    const refresh_token = await this.jwtService.signAsync(user);
+    try {
+      refresh_token = await this.jwtService.signAsync({
+        id: user.id,
+        email: user.email,
+        type: 'access_token',
+      });
+    } catch (e) {
+      throw new HttpException(
+        'Could not generate refresh token',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
 
     // TODO: remove user list response //
 
@@ -107,7 +132,7 @@ export class AuthService {
     };
   }
 
-  async changePassword(userID: string, dto: ChangePasswordDto) {
+  public async changePassword(dto: ChangePasswordDto) {
     // ! ARE CONFIRMING PASSWORDS THE SAME
     // -------------------------
 
@@ -120,7 +145,7 @@ export class AuthService {
     // ! DOES USER EXIST
     // -------------------------
 
-    const record = await this.usersService.findByID(userID);
+    const record = await this.usersService.findByID(dto.uid);
 
     if (!record) throw new NotFoundException('User not found');
 
@@ -142,6 +167,19 @@ export class AuthService {
       code: HttpStatus.OK,
       message: 'Password changed successfully',
     };
+  }
+
+  public async refreshJwtToken(dto: RefreshTokenDto) {
+    // const refreshTokenData = await this.jwtService.verifyJWT(dto.refreshToken);
+
+    // if (refreshTokenData.type !== 'refresh_token')
+    //   throw new BadRequestException('Invalid refresh token');
+
+    // const user = await this.userService.findByID(refreshTokenData.id);
+
+    // if (!user) throw new NotFoundException('User not found');
+
+    return 'ahaha';
   }
 
   private async getHashedPassword(password: string) {
