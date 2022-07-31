@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserEntity, UsersService } from '../users/users.service';
+import { UserDetails, UserEntity, UsersService } from '../users/users.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -18,6 +18,8 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
+
+  private readonly refresh_tokens = new Map<string, string>();
 
   public async login(dto: LoginDto) {
     // ! DOES USER EXIST
@@ -85,8 +87,13 @@ export class AuthService {
   private async loginResponse(
     user: UserEntity,
   ): Promise<{ access_token?: string; refresh_token?: string; list?: any }> {
-    let access_token: string;
-    let refresh_token: string;
+    let access_token: string, refresh_token: string;
+
+    // ? CLEAR MAP OF REFRESH TOKENS
+    // -------------------------
+
+    this.refresh_tokens.clear();
+
     // ? GENERATE ACCESS TOKEN
     // -------------------------
     try {
@@ -101,10 +108,7 @@ export class AuthService {
         },
       );
     } catch (e) {
-      throw new HttpException(
-        'Could not generate access token',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // ? GENERATE REFRESH TOKEN
@@ -125,9 +129,10 @@ export class AuthService {
       throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // TODO: remove user list response //
+    // ? ADD REFRESH TOKEN TO MAP
+    // -------------------------
 
-    const list = await this.usersService.getAllUsers();
+    this.refresh_tokens.set(refresh_token, user.id);
 
     // * RETURN RESPONSE
     // -------------------------
@@ -135,7 +140,6 @@ export class AuthService {
     return {
       access_token,
       refresh_token,
-      list,
     };
   }
 
@@ -175,25 +179,45 @@ export class AuthService {
       message: 'Password changed successfully',
     };
   }
+  public async logout(dto: RefreshTokenDto) {
+    // * REMOVE REFRESH TOKEN FROM MAP
+    // -------------------------
+
+    this.refresh_tokens.delete(dto.refreshToken);
+
+    // * RETURN RESPONSE
+    // -------------------------
+
+    return {
+      code: HttpStatus.OK,
+      message: 'Logged out successfully',
+    };
+  }
 
   public async refreshJwtToken(dto: RefreshTokenDto) {
     // ! IS REFRESH TOKEN VALID
     // -------------------------
 
-    const isValid = this.jwtService.decode(dto.refreshToken, {
-      json: true,
-    });
+    const isTokenOld = this.refresh_tokens.has(dto.refreshToken);
 
-    if (!isValid) {
+    if (!isTokenOld) {
       throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
     }
 
-    // * RETURN REFRESH TOKEN
+    const { id } = this.jwtService.decode(dto.refreshToken) as UserDetails;
+
+    // * GET USER
     // -------------------------
+
+    const record = await this.usersService.findByID(id);
+
+    if (!record) {
+      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+    }
 
     // * RETURN LOGIN RESPONSE
 
-    return { isValid };
+    return this.loginResponse(record);
   }
 
   private async getHashedPassword(password: string) {

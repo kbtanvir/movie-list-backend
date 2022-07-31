@@ -15,24 +15,25 @@ export class AuthController {
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
+
   @HttpCode(200)
   @Post('login')
   async login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
   }
-  @UseGuards(JwtAuthGuard)
+
   @Post('refresh-token')
   async refreshJwtToken(@Body() dto: RefreshTokenDto) {
     return this.authService.refreshJwtToken(dto);
   }
 
-  // @Post('change-password')
-  // async changePassword(userID: string, @Body() dto: ChangePasswordDto) {
-  //   return this.authService.changePassword(userID, dto);
-  // }
   @UseGuards(JwtAuthGuard)
   @Post('change-password')
   async changePassword(@Body() dto: ChangePasswordDto) {
     return this.authService.changePassword(dto);
+  }
+  @Post('logout')
+  async logout(@Body() dto: RefreshTokenDto) {
+    return this.authService.logout(dto);
   }
 }

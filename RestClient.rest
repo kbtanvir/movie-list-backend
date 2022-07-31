@@ -5,7 +5,7 @@ content-type: application/json
 {
   	"firstName": "John",
  	"lastName": "Smith",
- 	"email": "john@gmail.com",
+ 	"email": "johsdfn@gmail.com",
  	"password": "admin"
 }
 
@@ -15,7 +15,7 @@ POST http://localhost:3000/auth/login
 content-type: application/json
 
 {
-   "email": "john@gmail.com",
+   "email": "johsdfn@gmail.com",
    "password": "admin"
 }
 
@@ -23,10 +23,17 @@ content-type: application/json
 
 POST http://localhost:3000/auth/refresh-token
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkyOTY0IiwiZW1haWwiOiJqb2huQGdtYWlsLmNvbSIsInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5Mjk2NDQyLCJleHAiOjE2NjE4ODg0NDJ9.vGwNyZqTCQo4te9SbFAPparJGKGACfeoPWnkb16-BVk
 
 {
-	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkyOTY0IiwiZW1haWwiOiJqb2huQGdtYWlsLmNvbSIsInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5Mjk2NDQyLCJleHAiOjE2NjE4ODg0NDJ9.vGwNyZqTCQo4te9SbFAPparJGKGACfeoPWnkb16-BVk"
+	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkzMDIwIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5MzAyMDEzLCJleHAiOjE2NjE4OTQwMTN9.ryYZbefnYccn63XV1C4HweUffaPGrHWkQtna6aBjso8"
+}
+###
+
+POST http://localhost:3000/auth/logout
+content-type: application/json
+
+{
+	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkzMDA4IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5MzAwODM5LCJleHAiOjE2NjE4OTI4Mzl9.qaxO6Kv9VLfomrL7rLyG7CNzLqVMqKkr5cCaWc5_I4I"
 }
 
 ###
