@@ -1,7 +1,13 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserEntity, UsersService } from '../users/users.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
@@ -13,65 +19,128 @@ export class AuthService {
   ) {}
 
   async login(dto: LoginDto) {
-    const { email, password } = dto;
-    const user = await this.usersService.findByEmail(email);
+    // ! DOES USER EXIST
+    // -------------------------
+    const record = await this.usersService.findByEmail(dto.email);
 
-    // if (!user) {
-    //   throw new HttpException('Email doesn not exist', HttpStatus.UNAUTHORIZED);
-    // }
+    if (!record) {
+      throw new HttpException('Email does not exist', HttpStatus.UNAUTHORIZED);
+    }
 
-    return {
-      message: 'working',
-      email,
-    };
-    const isValid = await bcrypt.compare(dto.password, user.password);
+    // ! IS PASSWORD VALID
+    // -------------------------
+
+    const isValid = await bcrypt.compare(dto.password, record.password);
 
     if (!isValid) {
       throw new HttpException('Invalid password', HttpStatus.UNAUTHORIZED);
     }
 
-    return this.loginResponse(user);
+    // * RETURN LOGIN RESPONSE
+    // -------------------------
+
+    return this.loginResponse(record);
   }
 
   async register(dto: RegisterDto) {
     const { email, password, ...rest } = dto;
 
-    const isExistingUser = await this.usersService.findByEmail(email);
-    if (isExistingUser)
+    // ! DOES USER ALREADY EXIST
+    // -------------------------
+
+    const record = await this.usersService.findByEmail(email);
+
+    if (record) {
       throw new HttpException(
         'An account with that email already exists!',
         HttpStatus.CONFLICT,
       );
+    }
 
     const hashedPassword = await this.getHashedPassword(password);
 
-    const user = await this.usersService.create({
-      ...rest,
+    // ! WAS NEW USER CREATED IN DB
+    // -------------------------
+
+    const newUser = await this.usersService.create({
+      id: Date.now().toString().slice(0, 8),
       email,
       password: hashedPassword,
-      id: Math.random().toString(36).substring(2),
+      ...rest,
     });
 
-    if (!user)
+    if (!newUser)
       throw new HttpException(
         'User could not be created',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
 
-    return this.loginResponse(user);
+    // * RETURN LOGIN RESPONSE
+    // -------------------------
+
+    return this.loginResponse(newUser);
   }
 
-  async loginResponse(
+  private async loginResponse(
     user: UserEntity,
   ): Promise<{ access_token: string; refresh_token: string; list: any }> {
+    // ? GENERATE ACCESS TOKEN ? //
+    // -------------------------
+
     const access_token = await this.jwtService.signAsync(user);
+
+    // ? GENERATE REFRESH TOKEN ? //
+    // -------------------------
     const refresh_token = await this.jwtService.signAsync(user);
+
+    // TODO: remove user list response //
+
     const list = await this.usersService.getAllUsers();
+
+    // * RETURN RESPONSE
+    // -------------------------
 
     return {
       access_token,
       refresh_token,
       list,
+    };
+  }
+
+  async changePassword(userID: string, dto: ChangePasswordDto) {
+    // ! ARE CONFIRMING PASSWORDS THE SAME
+    // -------------------------
+
+    if (dto.newPassword !== dto.confirmNewPassword)
+      throw new HttpException(
+        'Passwords does not match',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    // ! DOES USER EXIST
+    // -------------------------
+
+    const record = await this.usersService.findByID(userID);
+
+    if (!record) throw new NotFoundException('User not found');
+
+    // ! DOES OLD PASSWORD MATCH
+    // -------------------------
+
+    if (!bcrypt.compareSync(dto.oldPassword, record.password)) {
+      throw new HttpException('Incorrect old password', HttpStatus.BAD_REQUEST);
+    }
+
+    const hashedPassword = await this.getHashedPassword(dto.newPassword);
+
+    await this.usersService.update(record.id, hashedPassword);
+
+    // * RETURN RESPONSE
+    // -------------------------
+
+    return {
+      code: HttpStatus.OK,
+      message: 'Password changed successfully',
     };
   }
 

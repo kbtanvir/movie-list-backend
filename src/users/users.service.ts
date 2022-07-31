@@ -16,15 +16,7 @@ export type UserDetails = {
 
 @Injectable()
 export class UsersService {
-  private readonly users: UserEntity[] = [
-    {
-      firstName: 'John',
-      lastName: 'Smith',
-      email: 'john@gmail.com',
-      password: 'admin',
-      id: 'v33e8654qg8',
-    },
-  ];
+  private readonly users: UserEntity[] = [];
 
   async getAllUsers(): Promise<UserEntity[]> {
     return [...this.users];
@@ -45,6 +37,13 @@ export class UsersService {
   }
   async create(user: UserEntity): Promise<UserEntity> {
     this.users.push(user);
+    return user;
+  }
+  async update(uid: string, newPassword: string): Promise<UserEntity> {
+    const user = await this.findByID(uid);
+    if (user) {
+      user.password = newPassword;
+    }
     return user;
   }
 }

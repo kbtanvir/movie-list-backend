@@ -1,5 +1,23 @@
-Post http://localhost:3000/auth/login
+
+
+POST http://localhost:3000/auth/register
+content-type: application/json
+
 {
-	"email": "max@gmail.com", 
-	"password": "max"
+  	"firstName": "John",
+ 	"lastName": "Smith",
+ 	"email": "joasn@gmail.com",
+ 	"password": "admin"
 }
+
+###
+
+POST http://localhost:3000/auth/login
+content-type: application/json
+
+{
+   "email": "johdsfn@gmail.com",
+   "password": "admin"
+}
+
+###
