@@ -1,6 +1,12 @@
+let x = new Map();
 
+x.set('id', 'one');
 
-const key1 = require('crypto').randomBytes(32).toString('hex');
-const key2 = require('crypto').randomBytes(32).toString('hex');
+// let remove = x.delete('id');
 
-console.table({key1,key2})
+x.delete('id');
+x.set('id', 'one');
+
+let check = x.get('id') === 'one';
+
+console.table({ check });

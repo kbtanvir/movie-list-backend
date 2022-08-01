@@ -21,12 +21,24 @@ content-type: application/json
 
 ###
 
+GET  http://localhost:3000/auth/test
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkzMzg0IiwidHlwZSI6InJlZnJlc2hfdG9rZW4iLCJpYXQiOjE2NTkzMzg0NDcsImV4cCI6MTY2MTkzMDQ0N30.5_bRlsGD_hQCpqKrJAfy_js9R7Y_RkXVB87n2VvG2-Y"
+
+{
+	"testValue": "test"
+}
+
+###
+
 POST http://localhost:3000/auth/refresh-token
 content-type: application/json
 
 {
-	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkzMDIwIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5MzAyMDEzLCJleHAiOjE2NjE4OTQwMTN9.ryYZbefnYccn63XV1C4HweUffaPGrHWkQtna6aBjso8"
+	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkzMzk3IiwidHlwZSI6InJlZnJlc2hfdG9rZW4iLCJpYXQiOjE2NTkzMzk3NDAsImV4cCI6MTY2MTkzMTc0MH0.DqzAsdT0HsqVEXP0uQhVHKuFn1YJkZOw84IXtPaiNYI"
 }
+
+
 ###
 
 POST http://localhost:3000/auth/logout

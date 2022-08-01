@@ -6,8 +6,9 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserDetails, UserEntity, UsersService } from '../users/users.service';
+import { UserEntity, UsersService } from '../users/users.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { JwtPayload } from './dto/jwt.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -42,7 +43,7 @@ export class AuthService {
     // * RETURN LOGIN RESPONSE
     // -------------------------
 
-    return this.loginResponse(record);
+    return this.generateTokens(record);
   }
 
   public async register(dto: RegisterDto) {
@@ -81,26 +82,26 @@ export class AuthService {
     // * RETURN LOGIN RESPONSE
     // -------------------------
 
-    return this.loginResponse(newUser);
+    return this.generateTokens(newUser);
   }
 
-  private async loginResponse(
+  private async generateTokens(
     user: UserEntity,
-  ): Promise<{ access_token?: string; refresh_token?: string; list?: any }> {
+  ): Promise<{ access_token?: string; refresh_token?: string }> {
+    const { id } = user;
     let access_token: string, refresh_token: string;
 
-    // ? CLEAR MAP OF REFRESH TOKENS
+    // ? CLEAR MAP OF REFRESH TOKEN FOR USER
     // -------------------------
 
-    this.refresh_tokens.clear();
+    this.refresh_tokens.delete(id);
 
     // ? GENERATE ACCESS TOKEN
     // -------------------------
     try {
       access_token = await this.jwtService.signAsync(
         {
-          id: user.id,
-          email: user.email,
+          id,
           type: 'access_token',
         },
         {
@@ -117,8 +118,7 @@ export class AuthService {
     try {
       refresh_token = await this.jwtService.signAsync(
         {
-          id: user.id,
-          email: user.email,
+          id,
           type: 'refresh_token',
         },
         {
@@ -132,7 +132,7 @@ export class AuthService {
     // ? ADD REFRESH TOKEN TO MAP
     // -------------------------
 
-    this.refresh_tokens.set(refresh_token, user.id);
+    this.refresh_tokens.set(user.id, refresh_token);
 
     // * RETURN RESPONSE
     // -------------------------
@@ -180,10 +180,12 @@ export class AuthService {
     };
   }
   public async logout(dto: RefreshTokenDto) {
+    const { id } = this.jwtService.decode(dto.refreshToken) as JwtPayload;
+
     // * REMOVE REFRESH TOKEN FROM MAP
     // -------------------------
 
-    this.refresh_tokens.delete(dto.refreshToken);
+    this.refresh_tokens.delete(id);
 
     // * RETURN RESPONSE
     // -------------------------
@@ -194,22 +196,47 @@ export class AuthService {
     };
   }
 
-  public async refreshJwtToken(dto: RefreshTokenDto) {
-    // ! IS REFRESH TOKEN VALID
+  public async refreshTokens(dto: RefreshTokenDto) {
+    // * DECODE JWT PAYLOAD
     // -------------------------
 
-    const isTokenOld = this.refresh_tokens.has(dto.refreshToken);
+    const jwtPayload = this.jwtService.decode(dto.refreshToken) as JwtPayload;
 
-    if (!isTokenOld) {
-      throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
+    // ! IS TYPE REFRESH TOKEN
+    // -------------------------
+
+    if (jwtPayload.type !== 'refresh_token') {
+      throw new HttpException(
+        'Refresh token is required',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
-    const { id } = this.jwtService.decode(dto.refreshToken) as UserDetails;
-
-    // * GET USER
+    // ! DOEST REFRESH TOKEN EXIST
     // -------------------------
 
-    const record = await this.usersService.findByID(id);
+    if (this.refresh_tokens.get(jwtPayload.id) !== dto.refreshToken) {
+      throw new HttpException(
+        'Refresh token is invalid',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    // ! IS REFRESH TOKEN EXPIRED
+
+    const isExpired = jwtPayload.exp < Date.now() / 1000;
+
+    if (isExpired) {
+      throw new HttpException(
+        'Refresh token is expired',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    // ! DOES USER EXIST
+    // -------------------------
+
+    const record = await this.usersService.findByID(jwtPayload.id);
 
     if (!record) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
@@ -217,7 +244,7 @@ export class AuthService {
 
     // * RETURN LOGIN RESPONSE
 
-    return this.loginResponse(record);
+    return this.generateTokens(record);
   }
 
   private async getHashedPassword(password: string) {

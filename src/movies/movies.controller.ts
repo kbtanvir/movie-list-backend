@@ -1,21 +1,20 @@
-import { Controller, Get, HttpCode, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { Controller, Get, HttpCode, Param } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private moviesService: MoviesService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @Get()
   async getMoviesList() {
     return this.moviesService.getAllItems();
   }
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @Get(':id')
-  async getMovie(id) {
+  async readItem(@Param('id') id: string) {
     return this.moviesService.readItem(id);
   }
 }

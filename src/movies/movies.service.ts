@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { demoMovies } from './constants/demo';
 
 export type MovieGenre = 'action' | 'comedy' | 'drama' | 'thriller';
@@ -27,7 +27,16 @@ export class MoviesService {
   }
 
   async readItem(id: string): Promise<MovieEntity | undefined> {
-    return this.doc.find((item) => item.id === id);
+    // ! DOES MOVEI EXIST IN THE ARRAY
+    // -----------------------
+
+    const item = this.doc.find((item) => item.id === id);
+
+    if (!item) {
+      throw new HttpException('Item not found', HttpStatus.NOT_FOUND);
+    }
+
+    return item;
   }
   async createItem(item: MovieEntity): Promise<MovieEntity> {
     this.doc.push(item);
@@ -46,6 +55,10 @@ export class MoviesService {
   }
 
   async deleteItem(id: string): Promise<void> {
+    if (!id) {
+      throw new Error('ID is required');
+    }
+
     const item = await this.readItem(id);
     if (!item) {
       throw new Error('Item not found');
