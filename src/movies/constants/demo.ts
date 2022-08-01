@@ -1,51 +1,100 @@
 import { MovieEntity } from './../movies.service';
-export const demoMovies: MovieEntity[] = [
-  {
-    id: '2',
-    name: 'The Godfather',
-    description:
-      'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.',
-    image:
-      'https://m.media-amazon.com/images/M/MV5BZTRmNjQ1ZjgtY2I3Yi00ZWE2LWIzYjYtYzU1M2VjOTM2ZjMyXkEyXkFqcGdeQXVyNDYyMDk5MTU@._V1_SY1000_CR0,0,675,1000_AL_.jpg',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    genres: 'drama',
-    actors: ['Marlon Brando', 'Al Pacino', 'James Carney'],
-    directors: ['Francis Ford Coppola'],
-    writers: ['Mario Puzo'],
-    productionCompanies: ['Warner Bros.'],
-    rating: 9.2,
-  },
-  {
-    id: '3',
-    name: 'The Godfather: Part II',
-    description:
-      'In the continuing saga of the Corleone crime family, a young Vito Corleone grows up in Sicily and in 1910s New York; and he then joins the Mafia in the early 1900s.',
-    image:
-      'https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY1000_CR0,0,704,1000_AL_.jpg',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    genres: 'drama',
-    actors: ['Al Pacino', 'Robert De Niro', 'James Carano'],
-    directors: ['Francis Ford Coppola'],
-    writers: ['Mario Puzo'],
-    productionCompanies: ['Warner Bros.'],
-    rating: 9.0,
-  },
-  {
-    id: '4',
-    name: 'The Dark Knight',
-    description:
-      'When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, the caped crusader must come to terms with one of the greatest psychological tests of his ability to fight injustice.',
-    image:
-      'https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_SY1000_CR0,0,675,1000_AL_.jpg',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    genres: 'action',
-    actors: ['Christian Bale', 'Heath Ledger', 'Aaron Eckhart'],
-    directors: ['Christopher Nolan'],
-    writers: ['Jonathan Nolan', ' Christopher Nolan'],
-    productionCompanies: ['Warner Bros.'],
-    rating: 9.0,
-  },
-];
+
+export const demoMovies: MovieEntity[] = [...Array(20)].map((_, i) => ({
+  id: `${i}`,
+  name: (() => {
+    const names = [
+      'The Shawshank Redemption',
+      'The Godfather',
+      'The Godfather: Part II',
+      'The Dark Knight',
+      '12 Angry Monkeys',
+      "Schindler's List",
+      'Pulp Fiction',
+      'The Lord of the Rings: The Return of the King',
+      'The Lord of the Rings: The Fellowship of the Ring',
+      'The Lord of the Rings',
+      'Fight Club',
+      'Star Wars: Episode V - The Empire Strikes Back',
+      'Star Wars: Episode IV - A New Hope',
+      'Star Wars: Episode III - Revenge of the Sith',
+      'Star Wars: Episode II - Attack of the Clones',
+      'Star Wars: Episode I - The Phantom Menace',
+      'Forrest Gump',
+      'Inception',
+      'The Lord of the Rings: The Two Towers',
+      'The Lord of the Rings: The Return of the King',
+    ];
+    return names[i];
+  })(),
+  description: `Description of movie ${i}.`,
+
+  image: (() => {
+    return `https://picsum.photos/id/${i}/300/400`;
+  })(),
+
+  createdAt: (() => {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    return date;
+  })(),
+  updatedAt: (() => {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    return date;
+  })(),
+  genres: (() => {
+    const genres = ['action', 'comedy', 'drama', 'thriller'];
+    return genres.slice(0, Math.floor(Math.random() * 3) + 1);
+  })(),
+  actors: (() => {
+    const list = [
+      'Ralph Fiennes',
+      'Sylvester Stallone',
+      'Michael Caine',
+      'Martin Balsam',
+      'John Cusack',
+      'Tom Hanks',
+      'Julianne Moore',
+      'Samuel L. Jackson',
+      'Brad Pitt',
+      'Al Pacino',
+      'Tom Hanks',
+      'Tim Robbins',
+      'Morgan Freeman',
+      'Bob Gunton',
+      'William Shatner',
+      'Harold Ramis',
+      'Ralph Fiennes',
+      'Sylvester Stallone',
+      'Michael Caine',
+      'Martin Balsam',
+      'John Cusack',
+      'Tom Hanks',
+      'Julianne Moore',
+      'Samuel L. Jackson',
+      'Brad Pitt',
+      'Al Pacino',
+      'Tom Hanks',
+      'Tim Robbins',
+    ];
+    return list.slice(0, Math.floor(Math.random() * 10) + 1);
+  })(),
+  directors: (() => {
+    const list = [
+      'Frank Darabont',
+      'Francis Ford Coppola',
+      'Tim Burton',
+      'Steven Spielberg',
+      'Martin Scorsese',
+    ];
+    return list.slice(0, Math.floor(Math.random() * 5) + 1);
+  })(),
+  productionCompanies: (() => {
+    const companies = ['Warner Bros', 'Paramount', 'Universal'];
+    return companies.sort(() => Math.random() - 0.5);
+  })(),
+  rating: (() => {
+    return Math.floor(Math.random() * 10);
+  })(),
+}));

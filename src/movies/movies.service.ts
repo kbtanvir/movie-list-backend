@@ -10,10 +10,9 @@ export type MovieEntity = {
   image: string;
   createdAt: Date;
   updatedAt: Date;
-  genres: MovieGenre;
+  genres: string[];
   actors: string[];
   directors: string[];
-  writers: string[];
   productionCompanies: string[];
   rating: number;
 };
@@ -39,6 +38,13 @@ export class MoviesService {
     return item;
   }
   async createItem(item: MovieEntity): Promise<MovieEntity> {
+    if (this.doc.length > 20) {
+      throw new HttpException(
+        'You watched too many movies',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     this.doc.push(item);
     return item;
   }
