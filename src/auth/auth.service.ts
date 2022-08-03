@@ -87,7 +87,7 @@ export class AuthService {
 
   private async generateTokens(
     user: UserEntity,
-  ): Promise<{ access_token?: string; refresh_token?: string }> {
+  ): Promise<{ access_token?: string; refresh_token?: string; id?: any }> {
     const { id } = user;
     let access_token: string, refresh_token: string;
 
@@ -102,6 +102,12 @@ export class AuthService {
       access_token = await this.jwtService.signAsync(
         {
           id,
+          user: {
+            id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
           type: 'access_token',
         },
         {
@@ -119,6 +125,12 @@ export class AuthService {
       refresh_token = await this.jwtService.signAsync(
         {
           id,
+          user: {
+            id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
           type: 'refresh_token',
         },
         {
@@ -156,20 +168,18 @@ export class AuthService {
     // ! DOES USER EXIST
     // -------------------------
 
-    const record = await this.usersService.findByID(dto.uid);
-
-    if (!record) throw new NotFoundException('User not found');
+    const user = await this.usersService.verifiedUser(dto.uid);
 
     // ! DOES OLD PASSWORD MATCH
     // -------------------------
 
-    if (!bcrypt.compareSync(dto.oldPassword, record.password)) {
+    if (!bcrypt.compareSync(dto.oldPassword, user.password)) {
       throw new HttpException('Incorrect old password', HttpStatus.BAD_REQUEST);
     }
 
     const hashedPassword = await this.getHashedPassword(dto.newPassword);
 
-    await this.usersService.update(record.id, hashedPassword);
+    await this.usersService.update(user.id, hashedPassword);
 
     // * RETURN RESPONSE
     // -------------------------
@@ -180,12 +190,31 @@ export class AuthService {
     };
   }
   public async logout(dto: RefreshTokenDto) {
-    const { id } = this.jwtService.decode(dto.refreshToken) as JwtPayload;
+    // ! DID SENT BY USER
+    // -------------------------
+
+    const { id: userID } = this.jwtService.decode(
+      dto.refreshToken,
+    ) as JwtPayload;
+
+    // ! DOES USER EXIST
+    // -------------------------
+
+    const record = await this.usersService.findByID(userID);
+
+    if (!record) throw new NotFoundException('User not found');
+
+    // ! IS REFRESH TOKEN VALID
+    // -------------------------
+
+    if (!this.refresh_tokens.has(userID)) {
+      throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
+    }
 
     // * REMOVE REFRESH TOKEN FROM MAP
     // -------------------------
 
-    this.refresh_tokens.delete(id);
+    this.refresh_tokens.delete(userID);
 
     // * RETURN RESPONSE
     // -------------------------

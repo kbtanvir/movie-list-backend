@@ -23,7 +23,7 @@ content-type: application/json
 
 GET  http://localhost:3000/auth/test
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkzMzg0IiwidHlwZSI6InJlZnJlc2hfdG9rZW4iLCJpYXQiOjE2NTkzMzg0NDcsImV4cCI6MTY2MTkzMDQ0N30.5_bRlsGD_hQCpqKrJAfy_js9R7Y_RkXVB87n2VvG2-Y"
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk1NTE2IiwidXNlciI6eyJpZCI6IjE2NTk1NTE2IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NTk1NTE2NjgsImV4cCI6MTY1OTU1MTY3OH0.NVYVgWhfRN-O9wwhP4wJDrx77KhsGk5N2Ucu-Vgw9uI
 
 {
 	"testValue": "test"
@@ -35,7 +35,7 @@ POST http://localhost:3000/auth/refresh-token
 content-type: application/json
 
 {
-	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkzMzk3IiwidHlwZSI6InJlZnJlc2hfdG9rZW4iLCJpYXQiOjE2NTkzMzk3NDAsImV4cCI6MTY2MTkzMTc0MH0.DqzAsdT0HsqVEXP0uQhVHKuFn1YJkZOw84IXtPaiNYI"
+	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk1NTEzIiwidXNlciI6eyJpZCI6IjE2NTk1NTEzIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5NTUxNDI4LCJleHAiOjE2NjIxNDM0Mjh9.MmChJ-5waXW4wM0YDf3HcQpzKDsS85K4cKSYcCftckU"
 }
 
 
@@ -45,17 +45,17 @@ POST http://localhost:3000/auth/logout
 content-type: application/json
 
 {
-	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkzMDA4IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5MzAwODM5LCJleHAiOjE2NjE4OTI4Mzl9.qaxO6Kv9VLfomrL7rLyG7CNzLqVMqKkr5cCaWc5_I4I"
+	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMTY1OTU1MDMiLCJlbWFpbCI6ImpvaHNkZm5AZ21haWwuY29tIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiU21pdGgifSwidHlwZSI6ImFjY2Vzc190b2tlbiIsImlhdCI6MTY1OTU1MDQ0NSwiZXhwIjoxNjU5NTUwNDU1fQ.Z2LKTAcV5jcm1UC30F57EjWhxLfSfOdIP0PW23kbneI"
 }
 
 ###
 
 POST http://localhost:3000/auth/change-password
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTkyOTMxIiwiZW1haWwiOiJqb2huQGdtYWlsLmNvbSIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NTkyOTMxMjEsImV4cCI6MTY1OTI5NjcyMX0.rolG0u_4WiotST2Z8dXDOwp3WafPCegWAWtpdgBGD8s
+Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk1NTEzIiwidXNlciI6eyJpZCI6IjE2NTk1NTEzIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NTk1NTE1MTAsImV4cCI6MTY1OTU1MTUyMH0.59akftI-3x5cOl2KbVcd95KgPTCLZMi-BiCG2AwkTUc"
 
 {
-	"uid": "16592931",
+	"uid": "16595516",
    	"oldPassword": "admin",
    	"newPassword": "newpassword",
    	"confirmNewPassword": "newpassword"

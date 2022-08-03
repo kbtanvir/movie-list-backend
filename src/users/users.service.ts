@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 export type UserEntity = {
   id: string;
   email: string;
-  password: string;
+  password?: string;
   firstName: string;
   lastName: string;
 };
@@ -30,10 +30,13 @@ export class UsersService {
     };
   }
   async findByEmail(email: string): Promise<UserEntity | undefined> {
-    return this.users.find((user) => user.email.toString() === email);
+    const user = this.users.find((user) => user.email === email);
+    return user;
   }
   async findByID(uid: string): Promise<UserEntity | undefined> {
-    return this.users.find((user) => user.id === uid);
+    const user = this.users.find((user) => user.id === uid);
+
+    return user;
   }
   async create(user: UserEntity): Promise<UserEntity> {
     this.users.push(user);
@@ -44,6 +47,11 @@ export class UsersService {
     if (user) {
       user.password = newPassword;
     }
+    return user;
+  }
+  async verifiedUser(uid: string): Promise<UserEntity> {
+    const user = await this.findByID(uid);
+    if (!user) throw new NotFoundException('User not found');
     return user;
   }
 }
