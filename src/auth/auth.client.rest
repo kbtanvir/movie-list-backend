@@ -21,12 +21,21 @@ content-type: application/json
 
 ###
 
-GET  http://localhost:3000/auth/test
+POST http://localhost:3000/auth/request-change-password
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk1NTE2IiwidXNlciI6eyJpZCI6IjE2NTk1NTE2IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NTk1NTE2NjgsImV4cCI6MTY1OTU1MTY3OH0.NVYVgWhfRN-O9wwhP4wJDrx77KhsGk5N2Ucu-Vgw9uI
 
 {
-	"testValue": "test"
+   "email": "johsdfn@gmail.com"
+}
+
+###
+
+POST  http://localhost:3000/auth/test
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk3ODM2IiwidXNlciI6eyJpZCI6IjE2NTk3ODM2IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NTk3ODM2NzQsImV4cCI6MTY1OTc4MzY4NH0.2n9FPunwuWNb4oGZap5Z46kYg4mfETylKo9DmHJTaAY
+
+{
+	"test": "test"
 }
 
 ###
@@ -35,7 +44,7 @@ POST http://localhost:3000/auth/refresh-token
 content-type: application/json
 
 {
-	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk1NTEzIiwidXNlciI6eyJpZCI6IjE2NTk1NTEzIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5NTUxNDI4LCJleHAiOjE2NjIxNDM0Mjh9.MmChJ-5waXW4wM0YDf3HcQpzKDsS85K4cKSYcCftckU"
+	"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk3ODQ2IiwidXNlciI6eyJpZCI6IjE2NTk3ODQ2IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJyZWZyZXNoX3Rva2VuIiwiaWF0IjoxNjU5Nzg0NjY2LCJleHAiOjE2NjIzNzY2NjZ9.QQ28oZ1LVeXuv6nk32A5WQYfyNxpQnzIahm9yMdv79o"
 }
 
 
@@ -52,10 +61,11 @@ content-type: application/json
 
 POST http://localhost:3000/auth/change-password
 content-type: application/json
-Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk1NTEzIiwidXNlciI6eyJpZCI6IjE2NTk1NTEzIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NTk1NTE1MTAsImV4cCI6MTY1OTU1MTUyMH0.59akftI-3x5cOl2KbVcd95KgPTCLZMi-BiCG2AwkTUc"
+# Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk1NTEzIiwidXNlciI6eyJpZCI6IjE2NTk1NTEzIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NTk1NTE1MTAsImV4cCI6MTY1OTU1MTUyMH0.59akftI-3x5cOl2KbVcd95KgPTCLZMi-BiCG2AwkTUc"
 
 {
-	"uid": "16595516",
+	"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaHNkZm5AZ21haWwuY29tIiwidmVyaWZpY2F0aW9uQ29kZSI6Im0ycWNhOGVmbnJtZWdjYm9hNTV5dCIsInR5cGUiOiJjaGFuZ2VfcGFzc3dvcmQiLCJpYXQiOjE2NTk5ODQxNzMsImV4cCI6MTY1OTk4NDc3M30.VMMv0OiYEfS1hDQqSj2V1OIkeM26YreDN1QelyaNyWs",
+	"email": "johsdfn@gmail.com",
    	"oldPassword": "admin",
    	"newPassword": "newpassword",
    	"confirmNewPassword": "newpassword"

@@ -49,9 +49,14 @@ export class UsersService {
     }
     return user;
   }
-  async verifiedUser(uid: string): Promise<UserEntity> {
+  async verifyUserID(uid: string): Promise<UserEntity> {
     const user = await this.findByID(uid);
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException('User not found with id');
+    return user;
+  }
+  async verifyEmail(email: string): Promise<UserEntity> {
+    const user = await this.findByEmail(email);
+    if (!user) throw new NotFoundException('User not found with email');
     return user;
   }
 }

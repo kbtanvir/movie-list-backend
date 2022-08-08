@@ -1,16 +1,11 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ReqChangePasswordDto } from './dto/req-change-password.dto';
+
 import { JwtAuthGuard } from './guards/jwt.guard';
 
 @Controller('auth')
@@ -34,21 +29,26 @@ export class AuthController {
     return this.authService.refreshTokens(dto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('change-password')
   async changePassword(@Body() dto: ChangePasswordDto) {
     return this.authService.changePassword(dto);
   }
-  
-  @UseGuards(JwtAuthGuard)
-  @Post('logout')
-  async logout(@Body() dto: RefreshTokenDto) {
-    return this.authService.logout(dto);
+  // @UseGuards(JwtAuthGuard)
+  @Post('request-change-password')
+  async requestChangePassword(@Body() dto: ReqChangePasswordDto) {
+    return this.authService.requestChangePassword(dto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('test')
-  async test(@Body() dto: any) {
+  @Post('logout')
+  async logout(@Body() id) {
+    return this.authService.logout(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('test')
+  async test(@Body() dto: { test: string }) {
     return dto;
   }
 }
