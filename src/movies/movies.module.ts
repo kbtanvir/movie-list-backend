@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthModule } from 'src/auth/auth.module';
 import { JwtStrategy } from 'src/auth/guards/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { MoviesController } from './movies.controller';
