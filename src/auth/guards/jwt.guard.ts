@@ -28,7 +28,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     if (!tokenSplit) throw new BadRequestException('Access token is Required');
 
-    const jwtPayload: JwtPayload = await this.jwtService.verify(tokenSplit);
+    const jwtPayload: JwtPayload = await this.jwtService.verifyAsync(
+      tokenSplit,
+    );
+
+    if (!jwtPayload) throw new BadRequestException('Invalid Token');
 
     if (jwtPayload.type !== 'access_token') {
       throw new BadRequestException('Access token is Required');
