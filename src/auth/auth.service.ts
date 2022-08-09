@@ -91,7 +91,7 @@ export class AuthService {
   private async generateTokens(
     user: UserEntity,
   ): Promise<{ accessToken?: string; refreshToken?: string; id?: any }> {
-    const { id } = user;
+    const { id, email, firstName, lastName } = user;
     let accessToken: string, refreshToken: string;
 
     // ? CLEAR MAP OF REFRESH TOKEN FOR USER
@@ -105,12 +105,9 @@ export class AuthService {
       accessToken = await this.jwtService.signAsync(
         {
           id,
-          user: {
-            id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-          },
+          email,
+          firstName,
+          lastName,
           type: 'access_token',
         },
         {
@@ -128,12 +125,9 @@ export class AuthService {
       refreshToken = await this.jwtService.signAsync(
         {
           id,
-          user: {
-            id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-          },
+          email,
+          firstName,
+          lastName,
           type: 'refresh_token',
         },
         {
@@ -244,32 +238,23 @@ export class AuthService {
       message: 'Password changed successfully',
     };
   }
-  public async logout(id: string) {
-    // ! DID SENT BY USER
-    // -------------------------
+  public async logout(dto: string) {
+    const token = dto.split(' ')[1];
 
-    // const { id: userID } = this.jwtService.decode(
-    //   dto.refreshToken,
-    // ) as JwtPayload;
+    const { id } = await this.jwtService.verifyAsync<JwtPayload>(token);
 
-    // ! DOES USER EXIST
-    // -------------------------
+    // ? DOES USER EXIST
 
     const user = await this.usersService.findByID(id);
 
-    if (!user) throw new NotFoundException('User not found');
-
-    // ! IS REFRESH TOKEN VALID
-    // -------------------------
-
-    if (!this.refresh_tokens.has(id)) {
-      throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
 
     // * REMOVE REFRESH TOKEN FROM MAP
     // -------------------------
 
-    this.refresh_tokens.delete(id);
+    this.refresh_tokens.delete(user.id);
 
     // * RETURN RESPONSE
     // -------------------------

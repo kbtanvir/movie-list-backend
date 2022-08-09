@@ -7,12 +7,7 @@ export type UserEntity = {
   firstName: string;
   lastName: string;
 };
-export type UserDetails = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-};
+export type UserDetails = Omit<UserEntity, 'password'>;
 
 @Injectable()
 export class UsersService {
@@ -21,13 +16,14 @@ export class UsersService {
   async getAllUsers(): Promise<UserEntity[]> {
     return [...this.users];
   }
-  async getUserDetails(user: UserEntity): Promise<UserDetails> {
-    return {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    };
+  async getUserDetails(id: string): Promise<UserDetails> {
+    const user = await this.findByID(id);
+
+    if (!user) throw new NotFoundException('User not found with id');
+
+    const { password, ...userDetails } = user;
+    
+    return userDetails;
   }
   async findByEmail(email: string): Promise<UserEntity | undefined> {
     const user = this.users.find((user) => user.email === email);
@@ -38,6 +34,7 @@ export class UsersService {
 
     return user;
   }
+
   async create(user: UserEntity): Promise<UserEntity> {
     this.users.push(user);
     return user;

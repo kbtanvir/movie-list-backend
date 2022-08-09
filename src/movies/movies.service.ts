@@ -1,21 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { demoMovies } from './constants/demo';
+import { MovieEntity } from './entity/movie-entity';
 
 export type MovieGenre = 'action' | 'comedy' | 'drama' | 'thriller';
-
-export type MovieEntity = {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  createdAt: Date;
-  updatedAt: Date;
-  genres: string[];
-  actors: string[];
-  directors: string[];
-  productionCompanies: string[];
-  rating: number;
-};
 
 @Injectable()
 export class MoviesService {

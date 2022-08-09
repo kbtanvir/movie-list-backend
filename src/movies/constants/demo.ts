@@ -1,4 +1,4 @@
-import { MovieEntity } from './../movies.service';
+import { MovieEntity } from '../entity/movie-entity';
 
 export const demoMovies: MovieEntity[] = [...Array(20)].map((_, i) => ({
   id: `${i}`,
@@ -28,9 +28,16 @@ export const demoMovies: MovieEntity[] = [...Array(20)].map((_, i) => ({
     return names[i];
   })(),
   description: `Description of movie ${i}.`,
+  duration: (() => {
+    // 1 or 2
+    const list = ['1h 30min', '2h 20min', '2h 10min', '2h 30min'];
 
+    const randomized = list[Math.floor(Math.random() * list.length)];
+    return randomized;
+  })(),
   image: (() => {
-    return `https://picsum.photos/id/${i}/300/400`;
+    const idx = Math.floor(Math.random() * 100);
+    return `https://picsum.photos/id/${idx}/300/400`;
   })(),
 
   createdAt: (() => {

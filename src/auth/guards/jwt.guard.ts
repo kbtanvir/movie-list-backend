@@ -30,9 +30,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const jwtPayload: JwtPayload = await this.jwtService.verify(tokenSplit);
 
-    if (jwtPayload.type !== 'access_token')
+    if (jwtPayload.type !== 'access_token') {
       throw new BadRequestException('Access token is Required');
-
+    }
     const user = await this.userService.findByID(jwtPayload.id);
 
     if (!user) {
