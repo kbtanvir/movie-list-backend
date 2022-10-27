@@ -48,7 +48,6 @@ export class AuthService {
 
     return this.generateTokens(user);
   }
-
   public async register(dto: RegisterDto) {
     const { email, password, ...rest } = dto;
 
@@ -87,7 +86,6 @@ export class AuthService {
 
     return this.generateTokens(newUser);
   }
-
   private async generateTokens(
     user: UserEntity,
   ): Promise<{ accessToken?: string; refreshToken?: string; id?: any }> {
@@ -264,7 +262,6 @@ export class AuthService {
       message: 'Logged out successfully',
     };
   }
-
   public async refreshTokens(dto: RefreshTokenDto) {
     // * DECODE JWT PAYLOAD
     // -------------------------
@@ -315,12 +312,10 @@ export class AuthService {
 
     return this.generateTokens(record);
   }
-
   private async getHashedPassword(password: string) {
     const salt = await AuthService.generateSalt();
     return await bcrypt.hash(password, salt);
   }
-
   private static async generateSalt() {
     return await bcrypt.genSalt(10);
   }
