@@ -10,9 +10,9 @@ import { JwtStrategy } from './guards/jwt.strategy';
   imports: [
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: async () => ({
         // secret: configService.get('JWT_SECRET'),
-        secret: 'secret',
+        secret:  process.env.JWT_SECRET,
       }),
     }),
     UsersModule,
