@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DocumentType, ReturnModelType } from '@typegoose/typegoose';
 import { InjectModel } from 'nestjs-typegoose';
 
-import { FilterQuery } from 'mongoose';
+import { FilterQuery, Types } from 'mongoose';
 import { UserEntity } from '../entity/users.entity';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class UserRepository {
     @InjectModel(UserEntity)
     private readonly model: ReturnModelType<typeof UserEntity>,
   ) {}
-  async findByID(id: string) {
+  async findByID(id: Types.ObjectId) {
     return this.model.findById(id);
   }
 
@@ -23,7 +23,7 @@ export class UserRepository {
     return await this.model.create(user);
   }
 
-  async findAll(): Promise<DocumentType<UserEntity>[]> {
+  async findAll() {
     return this.model.find();
   }
 

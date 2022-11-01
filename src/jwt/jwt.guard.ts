@@ -5,8 +5,10 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
+import { JwtPayload } from 'src/auth/dto/jwt.dto';
+
 import { UsersService } from 'src/users/users.service';
-import { JwtPayload } from '../auth/dto/jwt.dto';
+
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

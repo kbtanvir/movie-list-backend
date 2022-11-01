@@ -6,7 +6,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjY4ODQ2I
 
 ###
 
-GET http://localhost:3000/movies/635a9f566a063dd2dccf98a8
+GET http://localhost:3000/movies/63609583de7191c4cf9b0202
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjY4ODQ2IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIiwidHlwZSI6ImFjY2Vzc190b2tlbiIsImlhdCI6MTY2Njg4NDY0MSwiZXhwIjoxNjY2ODg0NjcxfQ.4t7kyjQvrg67iX8ps971j6HE74ObHiEq35tghjDVv60
 
@@ -18,7 +18,7 @@ content-type: application/json
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjAwMzc5IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIiwidHlwZSI6ImFjY2Vzc190b2tlbiIsImlhdCI6MTY2MDAzODAwMywiZXhwIjoxNjYwMDM4MDMzfQ.59Y8IEMMJ5M_2mHpsGe0JqBN-XZ7DG4TnxHakqYH5aw
 
 {
-    "name" : "The Godfather"
+    "name" : "Harbinger 2 "
 }
 ###
 
@@ -27,7 +27,7 @@ content-type: application/json
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjAwMzc5IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIiwidHlwZSI6ImFjY2Vzc190b2tlbiIsImlhdCI6MTY2MDAzODAwMywiZXhwIjoxNjYwMDM4MDMzfQ.59Y8IEMMJ5M_2mHpsGe0JqBN-XZ7DG4TnxHakqYH5aw
 
 {
-    "name" : "Life of Pi"
+    "name" : "Life of Pi 2"
 }
 
 ###

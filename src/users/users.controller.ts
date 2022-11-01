@@ -1,4 +1,5 @@
 import { Controller, Get, HttpCode, Param, UseGuards } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { JwtAuthGuard } from 'src/jwt/jwt.guard';
 import { UsersService } from './users.service';
 
@@ -9,7 +10,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @Get(':id')
-  async login(@Param('id') id: string) {
+  async login(@Param('id') id: Types.ObjectId) {
     return this.userService.getUserDetails(id);
   }
 }

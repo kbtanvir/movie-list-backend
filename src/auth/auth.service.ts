@@ -3,13 +3,14 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserEntity, UsersService } from '../users/users.service';
+import { UserEntity } from 'src/users/entity/users.entity';
+import { UsersService } from '../users/users.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtPayload } from './dto/jwt.dto';
+
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -70,7 +71,6 @@ export class AuthService {
 
     const newUser = await this.usersService.create({
       ...rest,
-      id: Date.now().toString().slice(0, 8),
       email,
       password: hashedPassword,
     });
@@ -89,25 +89,18 @@ export class AuthService {
   private async generateTokens(
     user: UserEntity,
   ): Promise<{ accessToken?: string; refreshToken?: string; id?: any }> {
-    const { id, email, firstName, lastName } = user;
     let accessToken: string, refreshToken: string;
 
     // ? CLEAR MAP OF REFRESH TOKEN FOR USER
     // -------------------------
 
-    this.refresh_tokens.delete(id);
+    // this.refresh_tokens.delete(id);
 
     // ? GENERATE ACCESS TOKEN
     // -------------------------
     try {
       accessToken = await this.jwtService.signAsync(
-        {
-          id,
-          email,
-          firstName,
-          lastName,
-          type: 'access_token',
-        },
+        { id: user._id, type: 'access_token' },
         {
           expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN,
         },
@@ -121,13 +114,7 @@ export class AuthService {
 
     try {
       refreshToken = await this.jwtService.signAsync(
-        {
-          id,
-          email,
-          firstName,
-          lastName,
-          type: 'refresh_token',
-        },
+        { id: user._id, type: 'refresh_token' },
         {
           expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
         },
@@ -139,7 +126,7 @@ export class AuthService {
     // ? ADD REFRESH TOKEN TO MAP
     // -------------------------
 
-    this.refresh_tokens.set(user.id, refreshToken);
+    // this.refresh_tokens.set(user.id, refreshToken);
 
     // * RETURN RESPONSE
     // -------------------------
@@ -164,13 +151,13 @@ export class AuthService {
       { expiresIn: '10m' },
     );
 
-    this.verification_tokens.set(user.id, token);
+    // this.verification_tokens.set(user.id, token);
 
     // TODO: Send email with verification code
 
-    setTimeout(() => {
-      this.refresh_tokens.delete(user.id);
-    }, 1000 * 60 * 2);
+    // setTimeout(() => {
+    //   this.refresh_tokens.delete(user.id);
+    // }, 1000 * 60 * 2);
 
     return {
       token,
@@ -196,12 +183,12 @@ export class AuthService {
 
     // ? VERIFY VERIFICATION CODE
     // -------------------------
-    const token = this.verification_tokens.get(user.id);
+    // const token = this.verification_tokens.get(user.id);
 
-    if (!token || token !== dto.token) {
-      this.verification_tokens.delete(user.id);
-      throw new UnauthorizedException('Invalid token');
-    }
+    // if (!token || token !== dto.token) {
+    //   this.verification_tokens.delete(user.id);
+    //   throw new UnauthorizedException('Invalid token');
+    // }
 
     // ? ARE CONFIRMING PASSWORDS THE SAME
     // ?-------------------------
@@ -226,7 +213,7 @@ export class AuthService {
 
     const hashedPassword = await this.getHashedPassword(dto.newPassword);
 
-    await this.usersService.update(user.id, hashedPassword);
+    await this.usersService.update(user._id, hashedPassword);
 
     // * RETURN RESPONSE
     // -------------------------
@@ -252,7 +239,7 @@ export class AuthService {
     // * REMOVE REFRESH TOKEN FROM MAP
     // -------------------------
 
-    this.refresh_tokens.delete(user.id);
+    // this.refresh_tokens.delete(user._id);
 
     // * RETURN RESPONSE
     // -------------------------
@@ -281,12 +268,12 @@ export class AuthService {
     // ! DOEST REFRESH TOKEN EXIST
     // -------------------------
 
-    if (this.refresh_tokens.get(jwtPayload.id) !== dto.refreshToken) {
-      throw new HttpException(
-        'Refresh token is invalid',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
+    // if (this.refresh_tokens.get(jwtPayload.id) !== dto.refreshToken) {
+    //   throw new HttpException(
+    //     'Refresh token is invalid',
+    //     HttpStatus.UNAUTHORIZED,
+    //   );
+    // }
 
     // ! IS REFRESH TOKEN EXPIRED
 

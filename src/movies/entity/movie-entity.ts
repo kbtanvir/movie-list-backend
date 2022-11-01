@@ -1,4 +1,5 @@
 import { Prop } from '@typegoose/typegoose';
+import { IsArray } from 'class-validator';
 import { Model } from 'lib/utils/mongodb/modelOptions';
 import { DocumentCTWithTimeStamps } from 'lib/utils/serializer';
 
@@ -25,18 +26,22 @@ export class MoviesEntity extends DocumentCTWithTimeStamps {
   @Prop()
   updatedAt: Date;
 
-  @Prop()
+  @IsArray()
+  @Prop({ type: () => [String] })
   genres: string[];
 
-  @Prop()
+  @IsArray()
+  @Prop({ type: () => [String] })
   actors: string[];
 
-  @Prop()
+  @IsArray()
+  @Prop({ type: () => [String] })
   directors: string[];
 
-  @Prop()
+  @IsArray()
+  @Prop({ type: () => [String] })
   productionCompanies: string[];
 
-  @Prop()
+  @Prop({ type: () => [Number] })
   rating: number;
 }

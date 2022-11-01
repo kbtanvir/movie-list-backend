@@ -1,58 +1,53 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { SerializableService } from 'lib/utils/serializer/serializable.class';
+import { Types } from 'mongoose';
+import { UserEntity } from './entity/users.entity';
+import { UserRepository } from './repo/users.repo';
 
-export type UserEntity = {
-  id: string;
-  email: string;
-  password?: string;
-  firstName: string;
-  lastName: string;
-};
 export type UserDetails = Omit<UserEntity, 'password'>;
 
 @Injectable()
-export class UsersService {
-  private readonly users: UserEntity[] = [];
-
-  async getAllUsers(): Promise<UserEntity[]> {
-    return [...this.users];
+export class UsersService extends SerializableService<UserEntity> {
+  constructor(private readonly userRepo: UserRepository) {
+    super(UserEntity);
   }
-  async getUserDetails(id: string): Promise<UserDetails> {
+
+  async getAllUsers() {
+    this.userRepo.findAll();
+  }
+  async getUserDetails(id: Types.ObjectId): Promise<UserDetails> {
     const user = await this.findByID(id);
 
     if (!user) throw new NotFoundException('User not found with id');
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userDetails } = user;
-    
+
     return userDetails;
   }
   async findByEmail(email: string): Promise<UserEntity | undefined> {
-    const user = this.users.find((user) => user.email === email);
-    return user;
+    return this.userRepo.findByEmail(email);
   }
-  async findByID(uid: string): Promise<UserEntity | undefined> {
-    const user = this.users.find((user) => user.id === uid);
-
-    return user;
+  async findByID(uid: Types.ObjectId): Promise<UserEntity | undefined> {
+    return this.userRepo.findByID(uid);
   }
 
-  async create(user: UserEntity): Promise<UserEntity> {
-    this.users.push(user);
-    return user;
+  async create(user: UserEntity) {
+    return this.userRepo.create(user);
   }
-  async update(uid: string, newPassword: string): Promise<UserEntity> {
+  async update(uid: Types.ObjectId, newPassword: string) {
     const user = await this.findByID(uid);
     if (user) {
       user.password = newPassword;
     }
     return user;
   }
-  async verifyUserID(uid: string): Promise<UserEntity> {
+  async verifyUserID(uid: Types.ObjectId) {
     const user = await this.findByID(uid);
     if (!user) throw new NotFoundException('User not found with id');
     return user;
   }
-  async verifyEmail(email: string): Promise<UserEntity> {
+  async verifyEmail(email: string) {
     const user = await this.findByEmail(email);
     if (!user) throw new NotFoundException('User not found with email');
     return user;
