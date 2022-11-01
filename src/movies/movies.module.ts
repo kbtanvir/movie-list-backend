@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { MongooseModule } from '@nestjs/mongoose';
+import { TypegooseModule } from 'nestjs-typegoose';
 import { AuthModule } from 'src/auth/auth.module';
-import { JwtStrategy } from 'src/auth/guards/jwt.strategy';
+import { JwtStrategy } from 'src/jwt/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
+import { MoviesEntity } from './entity/movie-entity';
 import { MoviesController } from './movies.controller';
-import { Movies, MoviesSchema } from './movies.schema';
 import { MoviesService } from './movies.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Movies.name, schema: MoviesSchema }]),
+    TypegooseModule.forFeature([MoviesEntity]),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: async () => ({
@@ -19,7 +19,7 @@ import { MoviesService } from './movies.service';
       }),
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
   ],
   controllers: [MoviesController],
   providers: [MoviesService, JwtStrategy],

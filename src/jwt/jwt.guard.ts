@@ -6,7 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from 'src/users/users.service';
-import { JwtPayload } from '../dto/jwt.dto';
+import { JwtPayload } from '../auth/dto/jwt.dto';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

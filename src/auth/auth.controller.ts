@@ -13,7 +13,7 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ReqChangePasswordDto } from './dto/req-change-password.dto';
 
-import { JwtAuthGuard } from './guards/jwt.guard';
+import { JwtAuthGuard } from '../jwt/jwt.guard';
 
 @Controller('auth')
 export class AuthController {

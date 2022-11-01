@@ -6,15 +6,13 @@ import {
   HttpCode,
   Param,
   Patch,
-  Post,
-  UseGuards,
+  Post
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { Movies } from './movies.schema';
+import { MoviesEntity } from './entity/movie-entity';
 import { MoviesService } from './movies.service';
 
 @Controller('movies')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
  export class MoviesController {
    constructor(private moviesService: MoviesService) {}
 
@@ -32,13 +30,13 @@ import { MoviesService } from './movies.service';
 
    @HttpCode(200)
    @Post()
-   async createItem(@Body() dto: Movies) {
+   async createItem(@Body() dto: MoviesEntity) {
      return this.moviesService.createItem(dto);
    }
 
    @HttpCode(200)
    @Patch(':id')
-   async updateItem(@Param('id') id: string, @Body() dto: Partial<Movies>) {
+   async updateItem(@Param('id') id: string, @Body() dto: Partial<MoviesEntity>) {
      return this.moviesService.updateItem(id, dto);
    }
 
