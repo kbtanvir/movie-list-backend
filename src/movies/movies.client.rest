@@ -18,7 +18,7 @@ content-type: application/json
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjAwMzc5IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIiwidHlwZSI6ImFjY2Vzc190b2tlbiIsImlhdCI6MTY2MDAzODAwMywiZXhwIjoxNjYwMDM4MDMzfQ.59Y8IEMMJ5M_2mHpsGe0JqBN-XZ7DG4TnxHakqYH5aw
 
 {
-    "name" : "Harbinger 2 "
+    "name" : "Death Race"
 }
 ###
 
@@ -32,10 +32,7 @@ content-type: application/json
 
 ###
 
-DELETE http://localhost:3000/movies/635a9f626a063dd2dccf98ac
+DELETE http://localhost:3000/movies/63608df3c70f00beab35cd55
 content-type: application/json
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjAwMzc5IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIiwidHlwZSI6ImFjY2Vzc190b2tlbiIsImlhdCI6MTY2MDAzODAwMywiZXhwIjoxNjYwMDM4MDMzfQ.59Y8IEMMJ5M_2mHpsGe0JqBN-XZ7DG4TnxHakqYH5aw
 
-{
-    "name" : "The Godfather"
-}
