@@ -1,24 +1,24 @@
 
-GET http://localhost:3000/movies
+GET http://localhost:8080/movies
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjA5NmQ1MWVkNDNjMmFiYWI1MDVhZSIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NzU2NjAwNTksImV4cCI6MTY3NTY2MDA4OX0.A26YVPgTX74rZXECsqA92lWACkBrCyCHemxvJzufFzI
 
 
 ###
 
-GET http://localhost:3000/movies/63609583de7191c4cf9b0202
+GET http://localhost:8080/movies/63609583de7191c4cf9b0202
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjY4ODQ2IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIiwidHlwZSI6ImFjY2Vzc190b2tlbiIsImlhdCI6MTY2Njg4NDY0MSwiZXhwIjoxNjY2ODg0NjcxfQ.4t7kyjQvrg67iX8ps971j6HE74ObHiEq35tghjDVv60
 
 
 ###
 
-POST http://localhost:3000/movies
+POST http://localhost:8080/movies
 content-type: application/json
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjAwMzc5IiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIiwidHlwZSI6ImFjY2Vzc190b2tlbiIsImlhdCI6MTY2MDAzODAwMywiZXhwIjoxNjYwMDM4MDMzfQ.59Y8IEMMJ5M_2mHpsGe0JqBN-XZ7DG4TnxHakqYH5aw
 
 {
-    "name" : "Death Race"
+    "name" : "Top gun"
 }
 ###
 
