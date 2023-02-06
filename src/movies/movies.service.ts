@@ -19,11 +19,11 @@ export class MoviesService {
 
   async readItem(id: string): Promise<MoviesEntity> {
     return await this.model.findOne({ _id: id }).exec();
+    // if (!res) throw new NotFoundException('Item not found');
   }
   async createItem(dto: MoviesEntity): Promise<MoviesEntity> {
     const createdCat = new this.model(dto);
     return await createdCat.save();
-    // testing
   }
   async updateItem(
     id: string,
