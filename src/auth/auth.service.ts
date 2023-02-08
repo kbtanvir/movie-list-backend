@@ -141,9 +141,8 @@ export class AuthService {
   }
   public async requestChangePassword(dto: ReqChangePasswordDto) {
     const user = await this.usersService.verifyEmail(dto.email);
-    const optCode =
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15);
+
+    const optCode = Math.floor(1000 + Math.random() * 9000).toString();
 
     this.optCode.set(user.email, optCode);
 
@@ -156,13 +155,15 @@ export class AuthService {
       },
     });
 
+    // delete the code after 1 minutes
+
     setTimeout(() => {
       this.optCode.delete(dto.email);
-    }, 1000 * 60 * 2);
+    }, 60000);
 
     return {
       code: HttpStatus.OK,
-      message: 'Password change request sent',
+      message: `OPT sent to ${dto.email}`,
     };
   }
   public async confirmOPT(dto: ConfirmOPT) {
