@@ -16,7 +16,7 @@ content-type: application/json
 
 {
    "email": "tanvirkhaan003@gmail.com",
-   "password": "admin"
+   "password": "asdfasdf"
 }
 
 ###
@@ -34,14 +34,14 @@ content-type: application/json
 
 {  
  	"email":"tanvirkhaan003@gmail.com",
-   	"code": "mvao0p2xjyri8neeq7il99"
+   	"code": "9741"
 }
 
 ###
 
 POST  http://localhost:8080/auth/test
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjA5NmQ1MWVkNDNjMmFiYWI1MDVhZSIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NzU2NjAwNTksImV4cCI6MTY3NTY2MDA4OX0.A26YVPgTX74rZXECsqA92lWACkBrCyCHemxvJzufFzI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTM5YTNlNGZkZmQ4Y2M0N2RmYmVlNCIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NzU4NzU3MjQsImV4cCI6MTY3NTg3NTc1NH0.nNlCsWULl5rDJmISxfW-amGycbhfjy_Mf05S2BAKRBI
 
 {
 	"test": "test"
@@ -68,13 +68,13 @@ content-type: application/json
 
 POST http://localhost:8080/auth/change-password
 content-type: application/json
-# Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk1NTEzIiwidXNlciI6eyJpZCI6IjE2NTk1NTEzIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NTk1NTE1MTAsImV4cCI6MTY1OTU1MTUyMH0.59akftI-3x5cOl2KbVcd95KgPTCLZMi-BiCG2AwkTUc"
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTM5YTNlNGZkZmQ4Y2M0N2RmYmVlNCIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NzU4NzYzNTgsImV4cCI6MTY3NTg3NjM4OH0.9tEA8wHSQKi1ad7hn80wrtlFtifVrZQecI69FkbVk5E
+
 
 {
-	"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaHNkZm5AZ21haWwuY29tIiwidmVyaWZpY2F0aW9uQ29kZSI6Im0ycWNhOGVmbnJtZWdjYm9hNTV5dCIsInR5cGUiOiJjaGFuZ2VfcGFzc3dvcmQiLCJpYXQiOjE2NTk5ODQxNzMsImV4cCI6MTY1OTk4NDc3M30.VMMv0OiYEfS1hDQqSj2V1OIkeM26YreDN1QelyaNyWs",
-	"email": "johsdfn@gmail.com",
-   	"oldPassword": "admin",
-   	"newPassword": "newpassword",
-   	"confirmNewPassword": "newpassword"
+
+   	"uid": "63e39a3e4fdfd8cc47dfbee4",
+   	"newPassword": "asdfasdf"
+   
 }
 

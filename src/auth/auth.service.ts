@@ -196,16 +196,16 @@ export class AuthService {
     };
   }
   public async changePassword(dto: ChangePasswordDto) {
-    const isTokenVerified = await this.jwtService.verify(dto.token);
+    // const isTokenVerified = await this.jwtService.verify(dto.accessToken);
 
-    if (!isTokenVerified) {
-      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
-    }
+    // if (!isTokenVerified) {
+    //   throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+    // }
 
     // ? VERIFY USER EXISTS
     // -------------------------
 
-    const user = await this.usersService.findByEmail(dto.email);
+    const user = await this.usersService.findByID(dto.uid);
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -223,11 +223,12 @@ export class AuthService {
     // ? ARE CONFIRMING PASSWORDS THE SAME
     // ?-------------------------
 
-    if (dto.newPassword !== dto.confirmNewPassword)
-      throw new HttpException(
-        'Passwords does not match',
-        HttpStatus.BAD_REQUEST,
-      );
+    // if (dto.newPassword !== dto.repeatPassword) {
+    //   throw new HttpException(
+    //     'Passwords does not match',
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
 
     // // ! DOES USER EXIST
     // // -------------------------
@@ -237,13 +238,13 @@ export class AuthService {
     // ? DOES OLD PASSWORD MATCH
     // ? -------------------------
 
-    if (!bcrypt.compareSync(dto.oldPassword, user.password)) {
-      throw new HttpException('Incorrect old password', HttpStatus.BAD_REQUEST);
-    }
+    // if (!bcrypt.compareSync(dto.oldPassword, user.password)) {
+    //   throw new HttpException('Incorrect old password', HttpStatus.BAD_REQUEST);
+    // }
 
     const hashedPassword = await this.getHashedPassword(dto.newPassword);
 
-    await this.usersService.update(user._id, hashedPassword);
+    await this.usersService.updatePassword(user._id, hashedPassword);
 
     // * RETURN RESPONSE
     // -------------------------

@@ -30,12 +30,11 @@ export class AuthController {
     return this.authService.refreshTokens(dto);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('change-password')
-  async changePassword(@Body() dto: ChangePasswordDto) {
-    return this.authService.changePassword(dto);
+  async changePassword(@Body() dto: ChangePasswordDto,) {
+    return await this.authService.changePassword(dto);
   }
-  // @UseGuards(JwtAuthGuard)
   @Post('request-change-password')
   async requestChangePassword(@Body() dto: ReqChangePasswordDto) {
     return this.authService.requestChangePassword(dto);
@@ -45,9 +44,8 @@ export class AuthController {
     return this.authService.confirmOPT(dto);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @Post('logout')
-  async logout(@Body() uid: string ) {
+  async logout(@Body() uid: string) {
     return this.authService.logout(uid);
   }
 

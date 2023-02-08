@@ -32,7 +32,10 @@ export class UserRepository {
   ): Promise<DocumentType<UserEntity> | null> {
     return this.model.findOne(query);
   }
-  async updateItem(id: string, dto: Partial<UserEntity>): Promise<UserEntity> {
-    return this.model.findOneAndUpdate({ _id: id }, dto, { new: true });
+  async updateItem(
+    uid: Types.ObjectId,
+    dto: Partial<UserEntity>,
+  ): Promise<UserEntity> {
+    return this.model.findOneAndUpdate({ _id: uid }, dto, { new: true });
   }
 }

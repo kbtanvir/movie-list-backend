@@ -35,12 +35,8 @@ export class UsersService extends SerializableService<UserEntity> {
   async create(user: UserEntity) {
     return this.userRepo.create(user);
   }
-  async update(uid: Types.ObjectId, newPassword: string) {
-    const user = await this.findByID(uid);
-    if (user) {
-      user.password = newPassword;
-    }
-    return user;
+  async updatePassword(uid: Types.ObjectId, newPassword: string) {
+    await this.userRepo.updateItem(uid, { password: newPassword });
   }
   async verifyUserID(uid: Types.ObjectId) {
     const user = await this.findByID(uid);
