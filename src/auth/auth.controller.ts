@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Headers,
-  HttpCode,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { LoginDto } from './dto/login.dto';
@@ -14,6 +7,7 @@ import { RegisterDto } from './dto/register.dto';
 import { ReqChangePasswordDto } from './dto/req-change-password.dto';
 
 import { JwtAuthGuard } from '../jwt/jwt.guard';
+import { ConfirmOPT } from './dto/confirm-opt.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -46,11 +40,15 @@ export class AuthController {
   async requestChangePassword(@Body() dto: ReqChangePasswordDto) {
     return this.authService.requestChangePassword(dto);
   }
+  @Post('confirm-opt')
+  async confirmOPT(@Body() dto: ConfirmOPT) {
+    return this.authService.confirmOPT(dto);
+  }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('logout')
-  async logout(@Headers('authorization') dto: string) {
-    return this.authService.logout(dto);
+  async logout(@Body() uid: string ) {
+    return this.authService.logout(uid);
   }
 
   @UseGuards(JwtAuthGuard)

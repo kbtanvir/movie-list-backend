@@ -1,36 +1,45 @@
 
-POST https://movie-list-backend-production.up.railway.app:3000/auth/register
+POST http://localhost:8080/auth/register
 content-type: application/json
 
 {
-  	"firstName": "John",
- 	"lastName": "Smith",
- 	"email": "johsdfn@gmail.com",
+  	"firstName": "T",
+ 	"lastName": "K",
+ 	"email": "tanvirkhaan003@gmail.com",
  	"password": "admin"
 }
 
 ###
 
-POST http://localhost:3000/auth/login
+POST http://localhost:8080/auth/login
 content-type: application/json
 
 {
-   "email": "johsdfn@gmail.com",
+   "email": "tanvirkhaan003@gmail.com",
    "password": "admin"
 }
 
 ###
 
-POST http://localhost:3000/auth/request-change-password
+POST http://localhost:8080/auth/request-change-password
 content-type: application/json
 
 {
-   "email": "johsdfn@gmail.com"
+   "email": "tanvirkhaan003@gmail.com"
+}
+###
+
+POST http://localhost:8080/auth/confirm-opt
+content-type: application/json
+
+{  
+ 	"email":"tanvirkhaan003@gmail.com",
+   	"code": "mvao0p2xjyri8neeq7il99"
 }
 
 ###
 
-POST  http://localhost:3000/auth/test
+POST  http://localhost:8080/auth/test
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjA5NmQ1MWVkNDNjMmFiYWI1MDVhZSIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NzU2NjAwNTksImV4cCI6MTY3NTY2MDA4OX0.A26YVPgTX74rZXECsqA92lWACkBrCyCHemxvJzufFzI
 
@@ -40,7 +49,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjA5NmQ1M
 
 ###
 
-POST http://localhost:3000/auth/refresh-token
+POST http://localhost:8080/auth/refresh-token
 content-type: application/json
 
 {
@@ -50,14 +59,14 @@ content-type: application/json
 
 ###
 
-POST http://localhost:3000/auth/logout
+POST http://localhost:8080/auth/logout
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjAwMjMyIiwidXNlciI6eyJpZCI6IjE2NjAwMjMyIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NjAwMjMyOTQsImV4cCI6MTY2MDAyMzMyNH0.Y96WiY9CSk-4j12bcGHXN33fXHX2Vl8JC8YfXtySG68
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NjAwMjMyIiwidXNlciI6eyJpZCI6IjE2NjAwMjMyIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NjAwMjMyOTQsImV4cCI6MTY2MDAyMzMyNH0.Y96WiY9CSk-4j12bcGHXN33fXHX2Vl8JC8YfXtySG68
 
 
 ###
 
-POST http://localhost:3000/auth/change-password
+POST http://localhost:8080/auth/change-password
 content-type: application/json
 # Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2NTk1NTEzIiwidXNlciI6eyJpZCI6IjE2NTk1NTEzIiwiZW1haWwiOiJqb2hzZGZuQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6IkpvaG4iLCJsYXN0TmFtZSI6IlNtaXRoIn0sInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NTk1NTE1MTAsImV4cCI6MTY1OTU1MTUyMH0.59akftI-3x5cOl2KbVcd95KgPTCLZMi-BiCG2AwkTUc"
 

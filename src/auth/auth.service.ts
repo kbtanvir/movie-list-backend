@@ -6,9 +6,11 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { MailerService } from 'src/mailer/mailer.service';
 import { UserEntity } from 'src/users/entity/users.entity';
 import { UsersService } from '../users/users.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { ConfirmOPT } from './dto/confirm-opt.dto';
 import { JwtPayload } from './dto/jwt.dto';
 
 import { LoginDto } from './dto/login.dto';
@@ -21,10 +23,11 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private mailerService: MailerService,
   ) {}
 
   private readonly refresh_tokens = new Map<string, string>();
-  private readonly verification_tokens = new Map<string, string>();
+  private readonly optCode = new Map<string, string>();
 
   public async login(dto: LoginDto) {
     // ! DOES USER EXIST
@@ -138,39 +141,65 @@ export class AuthService {
   }
   public async requestChangePassword(dto: ReqChangePasswordDto) {
     const user = await this.usersService.verifyEmail(dto.email);
-    const verificationCode =
+    const optCode =
       Math.random().toString(36).substring(2, 15) +
       Math.random().toString(36).substring(2, 15);
 
-    const token = await this.jwtService.signAsync(
-      {
-        email: user.email,
-        verificationCode,
-        type: 'change_password',
+    this.optCode.set(user.email, optCode);
+
+    await this.mailerService.sendMail({
+      to: 'tanvirkhaan003@gmail.com',
+      subject: 'Password change request',
+      template: 'change-password',
+      context: {
+        code: optCode,
       },
-      { expiresIn: '10m' },
-    );
+    });
 
-    // this.verification_tokens.set(user.id, token);
-
-    // TODO: Send email with verification code
-
-    // setTimeout(() => {
-    //   this.refresh_tokens.delete(user.id);
-    // }, 1000 * 60 * 2);
+    setTimeout(() => {
+      this.optCode.delete(dto.email);
+    }, 1000 * 60 * 2);
 
     return {
-      token,
       code: HttpStatus.OK,
       message: 'Password change request sent',
     };
   }
-  public async changePassword(dto: ChangePasswordDto) {
-    // const isTokenVerified = await this.jwtService.verify(dto.token);
+  public async confirmOPT(dto: ConfirmOPT) {
+    const user = await this.usersService.verifyEmail(dto.email);
 
-    // if (!isTokenVerified) {
-    //   throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
-    // }
+    // check if the code is valid
+
+    if (this.optCode.get(user.email) !== dto.code) {
+      throw new HttpException('Invalid code', HttpStatus.UNAUTHORIZED);
+    }
+
+    // check if the code is expired
+
+    if (!this.optCode.has(user.email)) {
+      throw new HttpException('Code expired', HttpStatus.UNAUTHORIZED);
+    }
+
+    // delete the code from the map
+
+    this.optCode.delete(user.email);
+
+    // generate new tokens
+
+    const tokens = await this.generateTokens(user);
+
+    return {
+      code: HttpStatus.OK,
+      message: 'Opt verified',
+      tokens,
+    };
+  }
+  public async changePassword(dto: ChangePasswordDto) {
+    const isTokenVerified = await this.jwtService.verify(dto.token);
+
+    if (!isTokenVerified) {
+      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+    }
 
     // ? VERIFY USER EXISTS
     // -------------------------
@@ -223,23 +252,11 @@ export class AuthService {
       message: 'Password changed successfully',
     };
   }
-  public async logout(dto: string) {
-    const token = dto.split(' ')[1];
-
-    const { id } = await this.jwtService.verifyAsync<JwtPayload>(token);
-
-    // ? DOES USER EXIST
-
-    const user = await this.usersService.findByID(id);
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
+  public async logout(uid: string) {
     // * REMOVE REFRESH TOKEN FROM MAP
     // -------------------------
 
-    // this.refresh_tokens.delete(user._id);
+    this.refresh_tokens.delete(uid);
 
     // * RETURN RESPONSE
     // -------------------------

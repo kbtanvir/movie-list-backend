@@ -4,7 +4,6 @@ import { ReturnModelType } from '@typegoose/typegoose';
 
 import { InjectModel } from 'nestjs-typegoose';
 import { MoviesEntity } from './entity/movie-entity';
-export type MovieGenre = 'action' | 'comedy' | 'drama' | 'thriller';
 
 @Injectable()
 export class MoviesService {

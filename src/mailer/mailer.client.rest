@@ -1,7 +1,6 @@
 
-GET https://movie-list-backend-production.up.railway.app/movies
+GET http://localhost:8080/mailer
 content-type: application/json
-# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjA5NmQ1MWVkNDNjMmFiYWI1MDVhZSIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE2NzU2NjAwNTksImV4cCI6MTY3NTY2MDA4OX0.A26YVPgTX74rZXECsqA92lWACkBrCyCHemxvJzufFzI
 
 
 ###
